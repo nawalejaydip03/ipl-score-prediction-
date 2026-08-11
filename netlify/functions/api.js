@@ -44,7 +44,10 @@ function predictScore(payload) {
 }
 
 exports.handler = async (event) => {
-  const path = event.path.replace('/.netlify/functions/api', '');
+  const path = event.path
+    .replace('/.netlify/functions/api', '')
+    .replace('/api', '')
+    .replace(/\/+$/, '') || '/';
 
   if (event.httpMethod === 'GET' && path === '/teams') {
     return {
