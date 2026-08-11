@@ -35,6 +35,19 @@ The application will start at: **http://localhost:5000**
 
 Navigate to `http://localhost:5000` in your web browser.
 
+## Deployment
+
+This project has two parts:
+
+- A Flask backend that serves `/api/teams` and `/api/predict`
+- A browser frontend in `templates/` and `static/`
+
+For local development, run the Flask app with `python app.py`.
+
+For production, host the backend on a Python-capable service such as Render, Railway, Fly.io, or Hugging Face Spaces. If the frontend is hosted separately on Netlify, make sure `/api/*` is proxied to the backend API. Netlify alone will not run the Flask server.
+
+If you deploy both parts together, keep the frontend and backend on the same origin or update the frontend API base URL to match the backend host.
+
 ## How to Use
 
 1. **Select Teams**: Choose the batting and bowling teams
