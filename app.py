@@ -40,6 +40,26 @@ def prepare_features(batting_team, bowling_team, overs, runs, wickets, runs_in_p
     features.extend([overs, runs, wickets, runs_in_prev_5, wickets_in_prev_5])
     return np.array([features])
 
+def normalize_overs(overs_value):
+    """Normalize cricket overs so balls roll over after 5."""
+    try:
+        overs = float(overs_value)
+    except (TypeError, ValueError):
+        return None
+
+    whole_overs = int(overs)
+    ball_tens = round((overs - whole_overs) * 10)
+
+    if ball_tens < 0:
+        return None
+
+    if ball_tens > 5:
+        overs = whole_overs + 1
+    else:
+        overs = whole_overs + (ball_tens / 10)
+
+    return overs
+
 def train_model():
     """Train the model from ipl.csv data"""
     global model
@@ -121,7 +141,10 @@ def predict():
         if not batting_team or not bowling_team:
             return jsonify({'success': False, 'error': 'Teams are required'}), 400
         
-        overs = float(data.get('overs', 0))
+        overs = normalize_overs(data.get('overs', 0))
+        if overs is None or overs < 5 or overs > 20:
+            return jsonify({'success': False, 'error': 'Overs must use cricket format like 5.0, 5.1 ... 5.5, 6.0'}), 400
+
         runs = float(data.get('runs', 0))
         wickets = float(data.get('wickets', 0))
         runs_in_prev_5 = float(data.get('runs_in_prev_5', 0))

@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupFormHandler();
     setupShareButton();
     setupTeamSelectionVisuals();
+    setupOversInputBehavior();
 });
 
 // Setup visual feedback for team selection
@@ -36,6 +37,48 @@ function setupTeamSelectionVisuals() {
             }
         });
     });
+}
+
+function formatCricketOvers(rawValue) {
+    const raw = String(rawValue).trim();
+    if (!raw) {
+        return '';
+    }
+
+    const overs = Number(raw);
+    if (!Number.isFinite(overs)) {
+        return null;
+    }
+
+    const wholeOvers = Math.floor(overs);
+    const ballTens = Math.round((overs - wholeOvers) * 10);
+
+    if (ballTens < 0) {
+        return null;
+    }
+
+    if (ballTens > 5) {
+        return String(wholeOvers + 1);
+    }
+
+    return ballTens === 0 ? String(wholeOvers) : `${wholeOvers}.${ballTens}`;
+}
+
+function setupOversInputBehavior() {
+    const oversInput = document.getElementById('overs');
+    if (!oversInput) {
+        return;
+    }
+
+    const syncOversValue = () => {
+        const normalized = formatCricketOvers(oversInput.value);
+        if (normalized !== null && normalized !== oversInput.value) {
+            oversInput.value = normalized;
+        }
+    };
+
+    oversInput.addEventListener('input', syncOversValue);
+    oversInput.addEventListener('blur', syncOversValue);
 }
 
 // Load teams from backend
@@ -108,7 +151,7 @@ async function handleFormSubmit(event) {
         const data = {
             batting_team: formData.get('batting_team'),
             bowling_team: formData.get('bowling_team'),
-            overs: formData.get('overs'),
+            overs: formatCricketOvers(formData.get('overs')),
             runs: formData.get('runs'),
             wickets: formData.get('wickets'),
             runs_in_prev_5: formData.get('runs_in_prev_5'),
@@ -117,7 +160,7 @@ async function handleFormSubmit(event) {
         
         // Validate data
         if (!validateInputs(data)) {
-            showError('❌ Please fill in all fields correctly. Overs must be ≥ 5.0');
+            showError('❌ Please fill in all fields correctly. Overs must use cricket format like 5.0, 5.1 ... 5.5, 6.0');
             showLoading(false);
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
@@ -166,7 +209,10 @@ function validateInputs(data) {
         return false;
     }
     
-    const overs = parseFloat(data.overs);
+    const normalizedOvers = formatCricketOvers(data.overs);
+    if (normalizedOvers === null || normalizedOvers === '') return false;
+
+    const overs = parseFloat(normalizedOvers);
     const runs = parseFloat(data.runs);
     const wickets = parseFloat(data.wickets);
     const runs_in_prev_5 = parseFloat(data.runs_in_prev_5);

@@ -21,11 +21,39 @@ function encodeTeam(teamName) {
   return encoding;
 }
 
+function normalizeOvers(oversValue) {
+  const overs = Number(oversValue);
+  if (!Number.isFinite(overs)) {
+    return null;
+  }
+
+  const wholeOvers = Math.floor(overs);
+  const ballTens = Math.round((overs - wholeOvers) * 10);
+
+  if (ballTens < 0) {
+    return null;
+  }
+
+  if (ballTens > 5) {
+    return wholeOvers + 1;
+  }
+
+  return wholeOvers + (ballTens / 10);
+}
+
 function predictScore(payload) {
+  const overs = normalizeOvers(payload.overs);
+  if (overs === null || overs < 5 || overs > 20) {
+    return {
+      success: false,
+      error: 'Overs must use cricket format like 5.0, 5.1 ... 5.5, 6.0'
+    };
+  }
+
   const features = [
     ...encodeTeam(payload.batting_team),
     ...encodeTeam(payload.bowling_team),
-    Number(payload.overs),
+    overs,
     Number(payload.runs),
     Number(payload.wickets),
     Number(payload.runs_in_prev_5),
@@ -69,10 +97,19 @@ exports.handler = async (event) => {
         };
       }
 
+      const prediction = predictScore(body);
+      if (!prediction.success) {
+        return {
+          statusCode: 400,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+          body: JSON.stringify(prediction)
+        };
+      }
+
       return {
         statusCode: 200,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify(predictScore(body))
+        body: JSON.stringify(prediction)
       };
     } catch (error) {
       return {
