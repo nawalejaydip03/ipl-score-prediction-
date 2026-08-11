@@ -44,6 +44,8 @@ This project has two parts:
 
 For local development, run the Flask app with `python app.py`.
 
+For Netlify, publish the repository root so it serves the root-level `index.html`. That file is a static front-end entrypoint for Netlify, while the Flask app remains the backend entrypoint for local or separate Python hosting.
+
 For production, host the backend on a Python-capable service such as Render, Railway, Fly.io, or Hugging Face Spaces. If the frontend is hosted separately on Netlify, make sure `/api/*` is proxied to the backend API. Netlify alone will not run the Flask server.
 
 If you deploy both parts together, keep the frontend and backend on the same origin or update the frontend API base URL to match the backend host.

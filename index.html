@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Score Predictor - AI Powered Cricket Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="animated-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-cricket"></i>
+                    <div>
+                        <h1>IPL Score Predictor</h1>
+                        <p class="tagline">AI-Powered Cricket Analytics</p>
+                    </div>
+                </div>
+                <p class="header-subtitle">Predict first innings scores with machine learning precision</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="form-container">
+                <form id="predictionForm" class="prediction-form">
+                    <div class="form-card">
+                        <div class="card-header">
+                            <i class="fas fa-handshake"></i>
+                            <h2>Match Setup</h2>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="battingTeam">
+                                    <i class="fas fa-baseball-bat-ball"></i> Batting Team
+                                </label>
+                                <select id="battingTeam" name="batting_team" required>
+                                    <option value="">Choose batting team...</option>
+                                </select>
+                            </div>
+
+                            <div class="vs-separator">
+                                <span>vs</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bowlingTeam">
+                                    <i class="fas fa-bowling-ball"></i> Bowling Team
+                                </label>
+                                <select id="bowlingTeam" name="bowling_team" required>
+                                    <option value="">Choose bowling team...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line"></i>
+                            <h2>Current Match Status</h2>
+                            <span class="badge">At 5+ Overs</span>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="overs">
+                                    <i class="fas fa-stopwatch"></i> Overs Completed
+                                </label>
+                                <input type="number" id="overs" name="overs" min="5" max="20" step="0.1"
+                                       placeholder="9.2" required>
+                                <small>Format: X.Y (9.2 = 9 overs 2 balls)</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="runs">
+                                    <i class="fas fa-flag"></i> Total Runs
+                                </label>
+                                <input type="number" id="runs" name="runs" min="0" max="300"
+                                       placeholder="79" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="wickets">
+                                    <i class="fas fa-crosshairs"></i> Wickets Lost
+                                </label>
+                                <input type="number" id="wickets" name="wickets" min="0" max="10"
+                                       placeholder="2" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="card-header">
+                            <i class="fas fa-fire"></i>
+                            <h2>Powerplay Performance (First 5 Overs)</h2>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="runsPrev5">
+                                    <i class="fas fa-bolt"></i> Powerplay Runs
+                                </label>
+                                <input type="number" id="runsPrev5" name="runs_in_prev_5" min="0" max="100"
+                                       placeholder="60" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="wicketsPrev5">
+                                    <i class="fas fa-user-slash"></i> Powerplay Wickets
+                                </label>
+                                <input type="number" id="wicketsPrev5" name="wickets_in_prev_5" min="0" max="10"
+                                       placeholder="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-predict">
+                        <i class="fas fa-magic"></i> Predict Score
+                    </button>
+                </form>
+            </section>
+
+            <section id="resultSection" class="result-section hidden">
+                <div class="result-card-container">
+                    <div class="result-card">
+                        <div class="result-header">
+                            <i class="fas fa-bullseye"></i>
+                            <h2>Prediction Result</h2>
+                        </div>
+
+                        <div class="prediction-display">
+                            <div class="score-box main-score">
+                                <div class="score-label">Predicted Final Score</div>
+                                <div class="score-value" id="predictedScore">---</div>
+                                <div class="score-unit">Runs</div>
+                            </div>
+
+                            <div class="prediction-info">
+                                <div class="info-item">
+                                    <span class="info-label">Likely Range</span>
+                                    <span class="info-value" id="scoreRange">--- to ---</span>
+                                </div>
+                                <div class="info-note">
+                                    <i class="fas fa-info-circle"></i>
+                                    Margin of error: ±10 runs
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="result-actions">
+                            <button type="button" class="btn-reset" onclick="resetForm()">
+                                <i class="fas fa-redo"></i> New Prediction
+                            </button>
+                            <button type="button" class="btn-share">
+                                <i class="fas fa-share-alt"></i> Share Result
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="errorSection" class="error-section hidden">
+                <div class="error-card">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <h3>Oops! Something went wrong</h3>
+                    <p id="errorMessage"></p>
+                    <button type="button" class="btn-reset" onclick="resetForm()">
+                        <i class="fas fa-redo"></i> Try Again
+                    </button>
+                </div>
+            </section>
+
+            <div id="loadingSpinner" class="loading-spinner hidden">
+                <div class="spinner-container">
+                    <div class="cricket-ball"></div>
+                    <p>Analyzing match data...</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><i class="fas fa-brain"></i> Powered by Machine Learning</p>
+                    <p><i class="fas fa-database"></i> Trained on IPL Seasons 1-9 Data</p>
+                </div>
+                <div class="footer-note">
+                    <p>🏏 Cricket is unpredictable! Use this for insights, not guarantees.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+</html>

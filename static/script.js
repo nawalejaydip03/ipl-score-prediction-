@@ -1,4 +1,14 @@
 const API_BASE_URL = `${window.location.origin}/api`;
+const DEFAULT_TEAMS = [
+    'Chennai Super Kings',
+    'Delhi Daredevils',
+    'Kings XI Punjab',
+    'Kolkata Knight Riders',
+    'Mumbai Indians',
+    'Rajasthan Royals',
+    'Royal Challengers Bangalore',
+    'Sunrisers Hyderabad'
+];
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
@@ -50,8 +60,26 @@ async function loadTeams() {
         });
     } catch (error) {
         console.error('Error loading teams:', error);
-        showError('Failed to load teams. Make sure the API is deployed and reachable from this site.');
+        populateDefaultTeams();
+        showError('Running without the API. Team lists were loaded locally, but predictions still require the Flask backend.');
     }
+}
+
+function populateDefaultTeams() {
+    const battingTeamSelect = document.getElementById('battingTeam');
+    const bowlingTeamSelect = document.getElementById('bowlingTeam');
+
+    DEFAULT_TEAMS.forEach(team => {
+        const option1 = document.createElement('option');
+        option1.value = team;
+        option1.textContent = team;
+        battingTeamSelect.appendChild(option1);
+
+        const option2 = document.createElement('option');
+        option2.value = team;
+        option2.textContent = team;
+        bowlingTeamSelect.appendChild(option2);
+    });
 }
 
 // Setup form submission
