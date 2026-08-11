@@ -90,6 +90,9 @@ Navigate to `http://localhost:5000` in your web browser.
 
 ## Troubleshooting
 
+### Deployed on Netlify but the app does not run?
+Netlify serves static sites by default, but this project uses a Flask backend for `/api/teams` and `/api/predict`. Deploy the Python app on a backend host such as Render, Railway, Fly.io, or Hugging Face Spaces, then point the frontend to that API. If you keep the frontend on Netlify, you need a proxy or rewrite setup that forwards `/api/*` to the backend.
+
 ### Port 5000 already in use?
 Change the port in `app.py`:
 ```python

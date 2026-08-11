@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = `${window.location.origin}/api`;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
@@ -50,7 +50,7 @@ async function loadTeams() {
         });
     } catch (error) {
         console.error('Error loading teams:', error);
-        showError('Failed to load teams. Make sure the backend server is running on http://localhost:5000');
+        showError('Failed to load teams. Make sure the API is deployed and reachable from this site.');
     }
 }
 
@@ -128,7 +128,7 @@ async function handleFormSubmit(event) {
         showLoading(false);
         submitBtn.disabled = false;
         submitBtn.style.opacity = '1';
-        showError('⚠️ Error: ' + error.message + '. Make sure the backend server is running on http://localhost:5000');
+        showError('⚠️ Error: ' + error.message + '. Make sure the API is deployed and reachable from this site.');
     }
 }
 
@@ -237,7 +237,7 @@ function setupShareButton() {
             const text = `🏏 IPL Score Prediction: ${score} runs (${range})
             
 Predicted using AI-powered machine learning model!
-Check out the IPL Score Predictor: http://localhost:5000`;
+Check out the IPL Score Predictor: ${window.location.origin}`;
             
             if (navigator.share) {
                 navigator.share({
