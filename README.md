@@ -44,9 +44,9 @@ This project has two parts:
 
 For local development, run the Flask app with `python app.py`.
 
-For Netlify, publish the repository root so it serves the root-level `index.html`. That file is a static front-end entrypoint for Netlify, while the Flask app remains the backend entrypoint for local or separate Python hosting.
+For Netlify, publish the repository root so it serves the root-level `index.html`. The repo now includes a Netlify Function under `netlify/functions/api.js` that serves the `/api/teams` and `/api/predict` endpoints from the same trained linear model coefficients used by Flask.
 
-For production, host the backend on a Python-capable service such as Render, Railway, Fly.io, or Hugging Face Spaces. If the frontend is hosted separately on Netlify, make sure `/api/*` is proxied to the backend API. Netlify alone will not run the Flask server.
+If you keep using the Flask app directly, host the backend on a Python-capable service such as Render, Railway, Fly.io, or Hugging Face Spaces. If you use Netlify, the function layer now handles the API routes and avoids the 404.
 
 If you deploy both parts together, keep the frontend and backend on the same origin or update the frontend API base URL to match the backend host.
 

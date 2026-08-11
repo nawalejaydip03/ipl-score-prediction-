@@ -1,4 +1,4 @@
-const API_BASE_URL = `${window.location.origin}/api`;
+const API_BASE_URL = window.__API_BASE_URL__ || `${window.location.origin}/api`;
 const DEFAULT_TEAMS = [
     'Chennai Super Kings',
     'Delhi Daredevils',
