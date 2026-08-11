@@ -26,13 +26,13 @@ function setupTeamSelectionVisuals() {
     [battingTeam, bowlingTeam].forEach(select => {
         select.addEventListener('change', function() {
             if (this.value) {
-                this.style.borderColor = 'rgba(81, 207, 102, 0.8)';
-                this.style.boxShadow = '0 0 20px rgba(81, 207, 102, 0.3), inset 0 0 10px rgba(81, 207, 102, 0.1)';
-                this.style.background = 'rgba(81, 207, 102, 0.08)';
+                this.style.borderColor = 'rgba(0, 212, 255, 0.8)';
+                this.style.boxShadow = '0 0 20px rgba(0, 212, 255, 0.22), inset 0 0 10px rgba(0, 212, 255, 0.08)';
+                this.style.background = 'linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(31, 58, 147, 0.36))';
             } else {
                 this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
                 this.style.boxShadow = 'none';
-                this.style.background = 'rgba(255, 255, 255, 0.05)';
+                this.style.background = 'linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(31, 58, 147, 0.28))';
             }
         });
     });

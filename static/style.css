@@ -275,7 +275,7 @@ body {
     padding: 14px 16px;
     border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.05);
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(31, 58, 147, 0.28));
     color: var(--light);
     font-size: 1em;
     font-family: inherit;
@@ -292,32 +292,37 @@ body {
 }
 
 .form-group select option {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    background: var(--dark);
     color: white;
     padding: 12px;
     border: none;
 }
 
 .form-group select option:checked {
-    background: linear-gradient(135deg, var(--secondary), #00a8cc);
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
     color: white;
     font-weight: 600;
     box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
 .form-group select option:hover {
-    background: linear-gradient(135deg, var(--secondary), #00a8cc);
+    background: linear-gradient(135deg, #172554, #0f766e);
 }
 
 /* Highlight select when it has a value */
 .form-group select:valid {
-    border-color: rgba(81, 207, 102, 0.5);
-    box-shadow: 0 0 15px rgba(81, 207, 102, 0.2);
+    border-color: rgba(0, 212, 255, 0.35);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.14);
 }
 
 .form-group select:valid:focus {
     border-color: var(--secondary);
     box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.form-group select:focus,
+.form-group select:hover {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(31, 58, 147, 0.42));
 }
 
 .form-group input::placeholder,
